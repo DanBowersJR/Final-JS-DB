@@ -3,18 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>Login</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
     <div class="main-content">
-        <h1>Sign Up</h1>
+        <h1>Login</h1>
         
+        <% if (successMessage) { %>
+            <p class="message"><%= successMessage %></p>
+        <% } %>
+
         <% if (errorMessage) { %>
             <p class="error-message"><%= errorMessage %></p>
         <% } %>
 
-        <form action="/signup" method="POST">
+        <form action="/login" method="POST">
             <div class="form-input-container">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" placeholder="Enter your username" required>
@@ -23,9 +27,9 @@
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" placeholder="Enter your password" required>
             </div>
-            <button type="submit" class="action-button">Sign Up</button>
+            <button type="submit" class="action-button">Login</button>
         </form>
-        <p>Already have an account? <a href="/login">Log in!</a></p>
+        <p>Don't have an account? <a href="/signup">Sign Up!</a></p>
     </div>
 </body>
 </html>

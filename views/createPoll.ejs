@@ -1,23 +1,43 @@
-<!-- TODO: Header? -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a New Poll</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
 <body>
     <div class="main-content">
         <h1>Create a New Poll</h1>
+
+        <% if (errorMessage) { %>
+            <p class="error-message"><%= errorMessage %></p>
+        <% } %>
+
         <form action="/createPoll" method="POST">
             <div class="form-input-container">
                 <label for="question">Poll Question:</label>
-                <input type="text" id="question" name="question" required>
+                <input type="text" id="question" name="question" placeholder="Enter your question here" required>
             </div>
             <div class="form-input-container">
                 <label for="option1">Option 1:</label>
-                <input type="text" id="option1" name="options[Option 1]" required>
+                <input type="text" id="option1" name="options[Option 1]" placeholder="Enter option 1" required>
             </div>
             <div class="form-input-container">
                 <label for="option2">Option 2:</label>
-                <input type="text" id="option2" name="options[Option 2]" required>
+                <input type="text" id="option2" name="options[Option 2]" placeholder="Enter option 2" required>
             </div>
-            <!-- If necessary, you can add more options similar to how they were added above -->
-            <button type="submit" class="action-button full-width">Create Poll</button>
+            <div class="form-input-container">
+                <label for="option3">Option 3 (Optional):</label>
+                <input type="text" id="option3" name="options[Option 3]" placeholder="Enter option 3 (optional)">
+            </div>
+            <div class="form-input-container">
+                <label for="option4">Option 4 (Optional):</label>
+                <input type="text" id="option4" name="options[Option 4]" placeholder="Enter option 4 (optional)">
+            </div>
+            <button type="submit" class="action-button">Create Poll</button>
         </form>
+        <a href="/dashboard" class="back-link">Back to Dashboard</a>
     </div>
 </body>
 </html>
