@@ -1,14 +1,14 @@
-/* Body with a modern gradient background */
+=/* Body with a modern gradient background */
 body {
-    background: linear-gradient(120deg, rgba(93,142,251,1) 0%, rgba(0,212,255,1) 100%);
+    background: linear-gradient(120deg, rgba(93, 142, 251, 1) 0%, rgba(0, 212, 255, 1) 100%);
     height: 100%;
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
     font-family: 'Lato', sans-serif;
     display: flex;
     color: #F6F6F6;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start; /* Align the content to the top */
     align-items: center;
 }
 
@@ -19,54 +19,36 @@ body {
     color: #333333;
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    padding: 30px;
+    padding: 35px 25px; /* Adjusted padding for better spacing */
     text-align: center;
-    margin: 20px auto;
+    margin: 50px auto; /* Adjust margin for better vertical centering */
+    box-sizing: border-box;
 }
 
 /* Titles and headings */
 .main-content h1 {
-    font-size: 40px;
-    margin-bottom: 20px;
+    font-size: 38px; /* Slightly reduced font size */
+    margin-bottom: 20px;  /* Adjusted bottom margin */
     color: #1e3c72;
 }
 
-/* Forms styling */
+/* Form styling */
 .main-content form {
     font-size: 18px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-}
-
-.main-content form .form-input-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-.main-content form label {
-    margin-bottom: 5px;
-    color: #333333;
-    font-weight: bold;
-}
-
-.main-content form input {
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #cccccc;
-    width: 100%;
+    align-items: center;
+    gap: 15px; /* Slightly reduced gap for a balanced layout */
 }
 
 /* Buttons with gradients */
 button.action-button, .action-button {
+    margin-top: 40px;  /* Adjusted margin-top for more space between the text and buttons */
     background: linear-gradient(90deg, #4caf50, #81c784);
     color: white;
     text-decoration: none;
     padding: 12px 20px;
-    border-radius: 8px;
+    border-radius: 23px;
     font-size: 18px;
     text-align: center;
     transition: all 0.3s ease;
@@ -77,7 +59,7 @@ button.action-button, .action-button {
 button.action-button:hover, .action-button:hover {
     background: linear-gradient(90deg, #388e3c, #66bb6a);
     color: #f1f1f1;
-    transform: scale(1.02); /* Slight zoom on hover */
+    transform: scale(1.05); /* Slight zoom on hover */
 }
 
 /* Back to Dashboard link */
@@ -85,7 +67,7 @@ button.action-button:hover, .action-button:hover {
     color: #007bff;
     text-decoration: none;
     font-size: 16px;
-    margin-top: 20px;
+    margin-top: 15px; /* Adjusted top margin */
     display: inline-block;
 }
 
@@ -98,14 +80,14 @@ button.action-button:hover, .action-button:hover {
 .error-message {
     color: red;
     font-weight: bold;
-    margin-bottom: 15px;
+    margin-bottom: 15px; /* Reduced margin */
     font-size: 16px;
 }
 
 .message {
     color: green;
     font-size: 16px;
-    margin-bottom: 15px;
+    margin-bottom: 15px; /* Reduced margin */
 }
 
 /* Poll container styling */
@@ -113,26 +95,60 @@ button.action-button:hover, .action-button:hover {
     background-color: #ffffff;
     color: #333333;
     padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
+    border-radius: 12px;
+    margin-bottom: 15px; /* Adjusted bottom margin */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    box-sizing: border-box;
 }
 
 .poll-container h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
+    font-size: 24px; /* Slightly reduced font size */
+    margin-bottom: 12px; /* Adjusted margin */
     color: #1e3c72;
 }
 
 .poll-options {
-    margin-top: 10px;
+    margin-top: 8px; /* Adjusted margin */
     font-size: 18px;
 }
 
 .poll-options li {
-    margin-bottom: 5px;
+    margin-bottom: 8px; /* Adjusted margin */
 }
 
 .poll-options strong {
     font-weight: bold;
+}
+
+/* Poll form buttons */
+.poll-form button {
+    background: linear-gradient(90deg, #4caf50, #81c784);
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.poll-form button:hover {
+    background: linear-gradient(90deg, #388e3c, #66bb6a);
+    color: #f1f1f1;
+    transform: scale(1.05);
+}
+
+/* Smooth container transitions */
+.poll-container, .main-content {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Space between buttons and text */
+button.action-button {
+    margin-top: 30px;  /* Adjusted space between buttons and text */
+    margin-bottom: 15px;  /* Adjusted space below the buttons */
 }

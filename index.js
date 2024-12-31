@@ -8,7 +8,7 @@ const flash = require('connect-flash'); // Import connect-flash
 
 const PORT = 3000;
 // MongoDB URI
-const MONGO_URI = 'mongodb://127.0.0.1:27017/keyin_test';
+const MONGO_URI = 'mongodb+srv://danbowersjr:Uq9zBajrEMsuFoKn@votingappcluster.zvlyo.mongodb.net/?retryWrites=true&w=majority&appName=votingAppCluster';
 
 const app = express();
 expressWs(app);
@@ -39,18 +39,64 @@ app.use((req, res, next) => {
 let connectedClients = [];
 
 // WebSocket setup
-app.ws('/ws', (socket, request) => {
+app.ws('/ws', (socket) => {
+    console.log('New WebSocket connection established'); // Log WebSocket connection
+
     connectedClients.push(socket);
 
     socket.on('message', async (message) => {
-        const data = JSON.parse(message);
-        console.log('Received message:', data);
+        console.log('Received message:', message);  // Log received message
+
+        // Try parsing the incoming message as JSON
+        let data;
+        try {
+            data = JSON.parse(message);
+        } catch (error) {
+            console.error('Error parsing message:', error);  // Log error if parsing fails
+        }
+
+        if (data) {
+            if (data.type === 'vote') {
+                handleVote(data.pollId, data.selectedOption, socket);
+            }
+        }
     });
 
-    socket.on('close', async () => {
+    socket.on('close', () => {
+        console.log('WebSocket connection closed'); // Log when WebSocket connection closes
         connectedClients = connectedClients.filter((client) => client !== socket);
     });
 });
+
+/**
+ * Handles a vote and updates the database and connected clients.
+ * 
+ * @param {string} pollId The ID of the poll being voted on.
+ * @param {string} selectedOption The option that was voted for.
+ * @param {WebSocket} socket The WebSocket connection that sent the vote.
+ */
+async function handleVote(pollId, selectedOption, socket) {
+    try {
+        const poll = await Poll.findById(pollId);
+        const optionToUpdate = poll.options.find(option => option.answer === selectedOption);
+
+        if (optionToUpdate) {
+            optionToUpdate.votes += 1;
+            await poll.save();
+
+            // Notify all connected clients of the updated poll
+            connectedClients.forEach(client => {
+                client.send(JSON.stringify({
+                    type: 'vote_update',
+                    poll: poll
+                }));
+            });
+        }
+    } catch (error) {
+        console.error('Error handling vote:', error);
+        socket.send(JSON.stringify({ type: 'error', message: 'Failed to process vote.' }));
+    }
+}
 
 // MongoDB User Schema and Model
 const User = mongoose.model('User', new mongoose.Schema({
@@ -100,7 +146,6 @@ app.post('/login', async (req, res) => {
 
         req.session.user = { id: user._id, username: user.username };
 
-        // Set success message
         req.flash('success', 'Login Successful!');
         return res.redirect('/dashboard');
     } catch (error) {
@@ -126,7 +171,6 @@ app.post('/signup', async (req, res) => {
         const newUser = new User({ username, password: hashedPassword });
         await newUser.save();
 
-        // Set success message for login page
         req.flash('success', 'Registration Successful! Please log in.');
         return res.redirect('/login');
     } catch (error) {
@@ -159,7 +203,6 @@ app.get('/createPoll', async (req, res) => {
 app.post('/createPoll', async (req, res) => {
     const { question, options } = req.body;
 
-    // Basic validation
     if (!question || question.trim().length < 5) {
         return res.render('createPoll', { errorMessage: 'Poll question must be at least 5 characters long.' });
     }
@@ -169,7 +212,6 @@ app.post('/createPoll', async (req, res) => {
         return res.render('createPoll', { errorMessage: 'Please provide at least 2 options for the poll.' });
     }
 
-    // Ensure options are unique
     const uniqueOptions = [...new Set(formattedOptions)];
     if (uniqueOptions.length !== formattedOptions.length) {
         return res.render('createPoll', { errorMessage: 'Poll options must be unique.' });
@@ -179,7 +221,6 @@ app.post('/createPoll', async (req, res) => {
         const newPoll = new Poll({ question, options: uniqueOptions.map(option => ({ answer: option, votes: 0 })) });
         await newPoll.save();
 
-        // Notify WebSocket clients
         connectedClients.forEach(client => {
             client.send(JSON.stringify({ type: 'new_poll', poll: newPoll }));
         });
